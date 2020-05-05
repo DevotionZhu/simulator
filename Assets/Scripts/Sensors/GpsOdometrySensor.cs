@@ -134,6 +134,12 @@ namespace Simulator.Sensors
 
             var location = MapOrigin.GetGpsLocation(transform.position, IgnoreMapOrigin);
 
+            var orientation = transform.rotation;
+            orientation.Set(-orientation.z, orientation.x, -orientation.y, orientation.w); // converting to right handed xyz
+
+            var angularVelocity = RigidBody.angularVelocity;
+            angularVelocity.Set(-angularVelocity.z, angularVelocity.x, -angularVelocity.y); // converting to right handed xyz
+
             var data = new GpsOdometryData()
             {
                 Name = Name,
@@ -148,10 +154,10 @@ namespace Simulator.Sensors
                 Altitude = location.Altitude,
                 Northing = location.Northing,
                 Easting = location.Easting,
-                Orientation = transform.rotation,
+                Orientation = orientation,
                 ForwardSpeed = Vector3.Dot(RigidBody.velocity, transform.forward),
                 Velocity = RigidBody.velocity,
-                AngularVelocity = RigidBody.angularVelocity,
+                AngularVelocity = angularVelocity,
                 WheelAngle = Dynamics.WheelAngle,
             };
             
@@ -172,6 +178,12 @@ namespace Simulator.Sensors
 
             var location = MapOrigin.GetGpsLocation(transform.position, IgnoreMapOrigin);
 
+            var orientation = transform.rotation;
+            orientation.Set(-orientation.z, orientation.x, -orientation.y, orientation.w); // converting to right handed xyz
+
+            var angularVelocity = RigidBody.angularVelocity;
+            angularVelocity.Set(-angularVelocity.z, angularVelocity.x, -angularVelocity.y); // converting to right handed xyz
+
             var graphData = new Dictionary<string, object>()
             {
                 {"Child Frame", ChildFrame},
@@ -181,10 +193,10 @@ namespace Simulator.Sensors
                 {"Altitude", location.Altitude},
                 {"Northing", location.Northing},
                 {"Easting", location.Easting},
-                {"Orientation", transform.rotation},
+                {"Orientation", orientation},
                 {"Forward Speed", Vector3.Dot(RigidBody.velocity, transform.forward)},
                 {"Velocity", RigidBody.velocity},
-                {"Angular Velocity", RigidBody.angularVelocity}
+                {"Angular Velocity", angularVelocity}
             };
             visualizer.UpdateGraphValues(graphData);
         }
